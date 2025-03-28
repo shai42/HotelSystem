@@ -16,8 +16,9 @@ class GuestServices:
         self.status = "In Progress"
 
     def update_status(self, status):
-        """ updates the status of the service."""
+        """ updates the status of the service and records the timestamp of the update."""
         self.status = status
+        self.request_time = datetime.now()  #Update the timestamp
 
     def notify_staff(self):
         """ returns a notification for the assigned staff"""
