@@ -9,12 +9,12 @@ class Hotel:
 
     def add_room(self, room):
         """Adds a room to the hotel."""
-        self.rooms.append(room)
+        self._rooms.append(room)
 
     def remove_room(self, room):
         """Removes a room from the hotel."""
         if room in self.rooms:
-            self.rooms.remove(room)
+            self._rooms.remove(room)
 
     def set_loyalty_program(self, loyalty_program):
         """ Sets the loyalty program for the hotel."""
