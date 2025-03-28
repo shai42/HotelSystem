@@ -1,0 +1,52 @@
+from datetime import datetime
+
+class Booking:
+    """represents a booking made by a guest"""
+    
+    def __init__(self, booking_id, guest, room, check_in, check_out, status="Confirmed"):
+        """ initializes a booking with an ID, guest, room, check-in/out dates, and status :D """
+        self.booking_id = booking_id  
+        self.guest = guest  
+        self.room = room  
+        self.check_in = check_in  #check-in date
+        self.check_out = check_out  #check-out date
+        self.status = status  #booking status
+        self.services = []  #a list of additional services requested
+
+    def make_booking(self):
+        """attempts to book a room if it is available; returns True if successful"""
+        if self.room.is_available():
+            self.room.book_room()
+            return True
+          return False  #The room wasn't available
+
+    def cancel_booking(self):
+        """Cancels the booking if it is confirmed and frees up the room"""
+        if self.status == "Confirmed":
+            self.status = "Cancelled"
+            self.room.free_room()
+            return True
+        return False  #the booking was not confirmed
+
+    def add_service(self, service):
+        """adds an additional service to the booking"""
+        self.services.append(service)
+
+    def remove_service(self, service):
+        """removes a service from the booking if it exists"""
+        if service in self.services:
+            self.services.remove(service)
+
+    def change_dates(self, new_check_in, new_check_out):
+        """updates the booking with new check-in and check-out dates"""
+        self.check_in = new_check_in
+        self.check_out = new_check_out
+    
+    def calculate_cost(self):
+        """calculates the total cost based on the number of nights stayed"""
+        num_nights = (self.check_out - self.check_in).days
+        return num_nights * self.room.price  # Cost = nights * room price
+
+    def __str__(self):
+        """returns a string representation of the booking"""
+        return f"Booking {self.booking_id} - {self.guest.name} ({self.status})"
