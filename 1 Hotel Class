@@ -3,9 +3,9 @@ class Hotel:
 
     def __init__(self, hotel_id, name):
         self._hotel_id = hotel_id  #a unique identifier for the hotel
-        self.name = name 
-        self._rooms = [] #a list to store rooms
-        self.loyalty_program = None  #initially there is no loyalty program
+        self.name = name
+        self._rooms = []  #a list to store rooms
+        self.loyalty_program = None  #at first there is no loyalty program
 
     def add_room(self, room):
         """Adds a room to the hotel."""
@@ -13,12 +13,13 @@ class Hotel:
 
     def remove_room(self, room):
         """Removes a room from the hotel."""
-        if room in self.rooms:
+        if room in self._rooms:
             self._rooms.remove(room)
 
     def set_loyalty_program(self, loyalty_program):
-        """ Sets the loyalty program for the hotel."""
+        """Sets the loyalty program for the hotel."""
         self.loyalty_program = loyalty_program
-        
+
     def __str__(self):
-        return f"Hotel {self.name} (ID: {self.hotel_id})"
+        return f"Hotel {self.name} (ID: {self._hotel_id})"
+
