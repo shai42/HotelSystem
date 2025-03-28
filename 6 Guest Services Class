@@ -1,7 +1,7 @@
 from datetime import datetime
 
 class GuestServices:
-    """ manages guest services such as room service and concierge"""
+    """ manages guest services such as housekeeping and transportation"""
     
     def __init__(self, service_id, service_type, cost, staff_assigned):
         self.service_id = service_id  
