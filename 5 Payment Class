@@ -1,4 +1,4 @@
-class InvalidPaymentStatusError(Exception):
+class InvalidPaymentStatusError(Exception): #incase someone tries to refund a cancelled booking
     """a custom exception raised when a payment is attempted with an invalid status"""
     pass
 
