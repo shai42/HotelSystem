@@ -26,6 +26,7 @@ class Booking:
         if self.status == "Confirmed":
             self.status = "Cancelled"
             self.room.free_room()
+            self.guest.bookings.remove(self)  #Removes the booking from the guest's history
             return True
         return False  #the booking was not confirmed
 
