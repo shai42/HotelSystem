@@ -1,5 +1,3 @@
-from datetime import datetime
-
 class Booking:
     """represents a booking made by a guest"""
     
@@ -22,13 +20,15 @@ class Booking:
         return False
 
     def cancel_booking(self):
-        """Cancels the booking if it is confirmed and frees up the room"""
+        """Cancels the booking if it is confirmed and frees up the room."""
         if self.status == "Confirmed":
-            self.status = "Cancelled"
-            self.room.free_room()
-            self.guest.bookings.remove(self)  #Removes the booking from the guest's history
-            return True
-        return False  #the booking was not confirmed
+           self.status = "Cancelled"
+           self.room.free_room()
+           self.guest.bookings.remove(self)  # Remove the booking from the guest's history
+           return True
+        elif self.status == "Cancelled":
+           raise ValueError(f"Booking {self.booking_id} has already been cancelled.")
+        return False
 
     def add_service(self, service):
         """adds an additional service to the booking"""
@@ -47,7 +47,7 @@ class Booking:
     def calculate_cost(self):
         """calculates the total cost based on the number of nights stayed"""
         num_nights = (self.check_out - self.check_in).days
-        return num_nights * self.room.price  #Cost = nights * room price
+        return num_nights * self.room.price  # Cost = nights * room price
 
     def __str__(self):
         """returns a string representation of the booking"""
