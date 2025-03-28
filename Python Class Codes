@@ -1,0 +1,16 @@
+class Hotel: #the hotel that manages both the rooms and loyalty program
+
+  def __init__(self, hotel_id, name): #initializes a hotel with the given ID and name
+        self.hotel_id = hotel_id
+        self.name = name
+        self.rooms = []
+        self.loyalty_program = None
+
+    def add_room(self, room): #adds a room to the hotel
+        self.rooms.append(room)
+
+    def remove_room(self, room): #Removes a room from the hotel
+        self.rooms.remove(room)
+
+    def __str__(self): #Returns the string representation of the hotel.
+        return f"Hotel {self.name} (ID: {self.hotel_id})"
