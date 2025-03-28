@@ -12,11 +12,11 @@ class Booking:
 
     def make_booking(self):
         """Attempts to book a room and adds the booking to the guest's bookings."""
-        if self.room.is_available():
-            self.room.book_room()
-            self.guest.manage_bookings(self)
-            return f"Booking {self.booking_id} confirmed for {self.guest.name}."
-        return f"Room {self.room.room_no} is not available for booking."
+        if not self.room.is_available():
+            raise ValueError(f"Room {self.room.room_no} is not available")  # <-- Explicit error
+        self.room.book_room()
+        self.guest.manage_bookings(self)
+        return True
 
     def cancel_booking(self):
         """Cancels the booking if it is confirmed and frees up the room."""
@@ -51,3 +51,4 @@ class Booking:
     def __str__(self):
         """returns a string representation of the booking"""
         return f"Booking {self.booking_id} - {self.guest.name} ({self.status})"
+
