@@ -1,7 +1,7 @@
 class Room:
-    """Represents a hotel room with specific attributes and availability status"""
+    """Represents a hotel room with specific attributes and availability status."""
 
-    def __init__(self, room_no: int, room_type: str, amenities: list, price: float, available: bool = True):
+    def __init__(self, room_no, room_type, amenities, price, available=True):
         """Initializes a room with a number, type, amenities, price, and availability."""
         self.room_no = room_no  #The room number
         self.type = room_type  #The type of room (Standard, Suite, etc)
@@ -9,22 +9,21 @@ class Room:
         self.price = price  #price per night
         self.available = available  #The availability status (True if available)
 
-    def is_available(self) -> bool:
-        """Checks if the room is available for booking"""
+    def is_available(self):
+        """Checks if the room is available for booking."""
         return self.available
 
-    def book_room(self) -> bool:
-        """Marks the room as booked if it is available"""
+    def book_room(self):
+        """Marks the room as booked if it is available."""
         if self.available:
             self.available = False  #Set the availability to false
             return True
         return False  #return False if the room is already booked
 
     def free_room(self):
-        """marks the room as available after checkout"""
+        """Marks the room as available after checkout."""
         self.available = True
 
-    def __str__(self) -> str:
-        """Returns a string representation of the room"""
+    def __str__(self):
+        """Returns a string representation of the room."""
         return f"Room {self.room_no} ({self.type})"
-
