@@ -46,3 +46,7 @@ class Booking:
         """calculates the total cost based on the number of nights stayed"""
         num_nights = (self.check_out - self.check_in).days
         return num_nights * self.room.price  #Cost = nights * room price
+
+    def __str__(self):
+        """returns a string representation of the booking"""
+        return f"Booking {self.booking_id} - {self.guest.name} ({self.status})"
