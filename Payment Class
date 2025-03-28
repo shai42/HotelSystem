@@ -1,0 +1,27 @@
+class Payment:
+    """ handles payments for hotel bookings """
+    
+    def __init__(self, payment_id, amount, method, status="Pending"):
+        """ initializes a payment with an ID, amount, method, and status """
+        self.payment_id = payment_id  # Unique payment ID
+        self.amount = amount  # Payment amount
+        self.method = method  # Payment method (e.g., Credit Card, Cash)
+        self.status = status  # Payment status (Pending, Completed, Refunded)
+
+    def process_payment(self):
+        """ processes the payment if it is pending and returns True if successful """
+        if self.status == "Pending":
+            self.status = "Completed"
+            return True
+        return False  #payment was already processed
+
+    def refund(self):
+        """ Refunds the payment if it was completed; returns True if successful """
+        if self.status == "Completed":
+            self.status = "Refunded"
+            return True
+        return False  #payment was not completed so it cannot be refunded
+
+    def __str__(self):
+        """ Returns a string representation of the payment """
+        return f"Payment {self.payment_id} - {self.amount} ({self.status})"
