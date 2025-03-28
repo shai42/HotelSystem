@@ -10,8 +10,12 @@ class Feedback:
         self.date = date.today()  #date the feedback was submitted
 
     def submit_feedback(self):
-        """submits the feedback with rating and comments"""
-        return f"Feedback submitted: {self.rating} stars - {self.comments}"
+        """submits the feedback and prevents duplicate feedback for the same booking."""
+        if self.feedback_id not in existing_feedback:
+            existing_feedback.append(self)
+            return f"Feedback submitted: {self.rating} stars - {self.comments}"
+        else:
+            raise ValueError("Feedback already submitted for this booking.")
 
     def view_feedback(self):
         """returns a detailed view of the feedback"""
