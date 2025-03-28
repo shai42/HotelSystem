@@ -18,7 +18,7 @@ class Booking:
         if self.room.is_available():
             self.room.book_room()
             return True
-          return False  #The room wasn't available
+        return False  #The room wasn't available
 
     def cancel_booking(self):
         """Cancels the booking if it is confirmed and frees up the room"""
@@ -45,8 +45,4 @@ class Booking:
     def calculate_cost(self):
         """calculates the total cost based on the number of nights stayed"""
         num_nights = (self.check_out - self.check_in).days
-        return num_nights * self.room.price  # Cost = nights * room price
-
-    def __str__(self):
-        """returns a string representation of the booking"""
-        return f"Booking {self.booking_id} - {self.guest.name} ({self.status})"
+        return num_nights * self.room.price  #Cost = nights * room price
