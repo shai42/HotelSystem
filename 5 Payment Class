@@ -1,3 +1,7 @@
+class InvalidPaymentStatusError(Exception):
+    """a custom exception raised when a payment is attempted with an invalid status"""
+    pass
+
 class Payment:
     """ handles payments for hotel bookings """
     
@@ -13,15 +17,15 @@ class Payment:
         if self.status == "Pending":
             self.status = "Completed"
             return True
-        return False  #payment was already processed
+        else:
+            raise InvalidPaymentStatusError(f"Payment {self.payment_id} cannot be processed because it's {self.status}.")
 
     def refund(self):
         """ Refunds the payment if it was completed; returns True if successful """
         if self.status == "Completed":
             self.status = "Refunded"
             return True
-        else:
-            raise ValueError(f"Payment {self.payment_id} cannot be processed because it's {self.status}.")
+        raise InvalidPaymentStatusError(f"Payment {self.payment_id} cannot be refunded because it is {self.status}.")
 
     def __str__(self):
         """ Returns a string representation of the payment """
