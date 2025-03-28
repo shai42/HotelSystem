@@ -2,6 +2,8 @@ from datetime import date
 
 class Feedback:
     """stores guest feedback and ratings"""
+  
+    existing_feedback = []  # Class-level list to store all feedback
     
     def __init__(self, feedback_id, rating, comments):
         self.feedback_id = feedback_id  #unique feedback id
@@ -11,16 +13,17 @@ class Feedback:
 
     def submit_feedback(self):
         """submits the feedback and prevents duplicate feedback for the same booking."""
-        if self.feedback_id not in existing_feedback:
-            existing_feedback.append(self)
+        if self.feedback_id not in Feedback.existing_feedback:
+            Feedback.existing_feedback.append(self.feedback_id)
             return f"Feedback submitted: {self.rating} stars - {self.comments}"
         else:
             raise ValueError("Feedback already submitted for this booking.")
 
     def view_feedback(self):
-        """returns a detailed view of the feedback"""
+        """Returns a detailed view of the feedback."""
         return f"Feedback ID: {self.feedback_id}, Rating: {self.rating}, Date: {self.date}, Comments: {self.comments}"
 
     def __str__(self):
-        """returns a string representation of the feedback"""
+        """Returns a string representation of the feedback."""
         return f"Feedback {self.feedback_id} - {self.rating} stars"
+
