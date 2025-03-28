@@ -27,3 +27,4 @@ class GuestServices:
     def __str__(self):
         """ returns a string representation of the service"""
         return f"Service {self.service_id} - {self.type} ({self.status})"
+
