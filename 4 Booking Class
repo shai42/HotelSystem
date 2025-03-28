@@ -14,11 +14,12 @@ class Booking:
         self.services = []  #a list of additional services requested
 
     def make_booking(self):
-        """attempts to book a room if it is available; returns True if successful"""
+        """ Attempts to book a room and adds the booking to the guest's bookings."""
         if self.room.is_available():
             self.room.book_room()
+            self.guest.manage_bookings(self)  #adds this booking to the guest's history
             return True
-        return False  #The room wasn't available
+        return False
 
     def cancel_booking(self):
         """Cancels the booking if it is confirmed and frees up the room"""
