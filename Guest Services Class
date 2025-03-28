@@ -1,0 +1,28 @@
+from datetime import datetime
+
+class GuestServices:
+    """ manages guest services such as room service and concierge"""
+    
+    def __init__(self, service_id, service_type, cost, staff_assigned):
+        self.service_id = service_id  
+        self.type = service_type  #type of service (housekeeping, room service, transportation, etc.)
+        self.status = "Requested"  #initial status of the service
+        self.cost = cost  #cost of the service
+        self.request_time = datetime.now()  #time when the service was requested
+        self.staff_assigned = staff_assigned  #staff member assigned to the service
+
+    def request_service(self):
+        """ changes the status to 'In Progress' when the service is requested"""
+        self.status = "In Progress"
+
+    def update_status(self, status):
+        """ updates the status of the service."""
+        self.status = status
+
+    def notify_staff(self):
+        """ returns a notification for the assigned staff"""
+        return f"Staff {self.staff_assigned} notified for service {self.type}."
+
+    def __str__(self):
+        """ returns a string representation of the service"""
+        return f"Service {self.service_id} - {self.type} ({self.status})"
