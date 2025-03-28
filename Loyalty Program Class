@@ -1,0 +1,14 @@
+class LoyaltyProgram:
+    """defines the loyalty program structure"""
+    
+    def __init__(self, tier_requirements, benefits):
+        self.tier_requirements = tier_requirements  #dictionary connecting the tier names to their requirments
+        self.benefits = benefits  #dictionary mapping tier names to their benefits
+
+    def get_tier_benefits(self, tier):
+        """returns the benefits for a given tier"""
+        return self.benefits.get(tier, "No benefits available.")
+
+    def __str__(self):
+        """returns a string representation of the loyalty program"""
+        return "Loyalty Program"
