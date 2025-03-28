@@ -7,6 +7,9 @@ class Hotel:
         self._rooms = []  #a list to store rooms
         self.loyalty_program = None  #at first there is no loyalty program
 
+    def get_rooms(self):
+        return self._rooms
+
     def add_room(self, room):
         """Adds a room to the hotel."""
         self._validate_room(room)
