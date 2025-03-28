@@ -1,0 +1,298 @@
+class Hotel: 
+    """ Represents a hotel with rooms and a loyalty program."""
+
+    def __init__(self, hotel_id, name):
+        self._hotel_id = hotel_id  #a unique identifier for the hotel
+        self.name = name
+        self._rooms = []  #a list to store rooms
+        self.loyalty_program = None  #at first there is no loyalty program
+
+    def get_rooms(self):
+        return self._rooms
+
+    def add_room(self, room):
+        """Adds a room to the hotel."""
+        self._validate_room(room)
+        self._rooms.append(room)
+
+    def remove_room(self, room):
+        """Removes a room from the hotel."""
+        if room in self._rooms:
+            self._rooms.remove(room)
+
+    def _validate_room(self, room):
+        """Validates if the room number exists among all available rooms."""
+        if room.room_no in [r.room_no for r in self._rooms]:
+            raise ValueError(f"Room number {room.room_no} already exists.")
+    
+    def set_loyalty_program(self, loyalty_program):
+        """Sets the loyalty program for the hotel."""
+        self.loyalty_program = loyalty_program
+
+
+class Room:
+    """Represents a hotel room with specific attributes and availability status."""
+
+    def __init__(self, room_no, room_type, amenities, price, available=True):
+        """Initializes a room with a number, type, amenities, price, and availability."""
+        self.room_no = room_no  # The room number
+        self.type = room_type  # The type of room (Standard, Suite, etc)
+        self.amenities = amenities  # A list of amenities available in the room
+        self.price = price  # Price per night
+        self.available = available  # The availability status (True if available)
+
+    def is_available(self):
+        """Checks if the room is available for booking."""
+        return self.available
+
+    def book_room(self):
+        """Marks the room as booked if it is available."""
+        if not self.available:
+            raise ValueError(f"Room {self.room_no} is already booked")  # <-- This was missing
+        self.available = False
+        return True
+
+    def free_room(self):
+        """Marks the room as available after checkout."""
+        self.available = True
+
+    def __str__(self):
+        """Returns a string representation of the room."""
+        return f"Room {self.room_no} ({self.type})"
+
+    def validate_room_number(self, room_no, all_rooms):
+        """Validates if the room number exists among all available rooms."""
+        if room_no not in [room.room_no for room in all_rooms]:
+            raise ValueError(f"Room number {room_no} does not exist.")
+
+
+class Guest:
+    """represents a guest with personal details and their booking history."""
+    
+    def __init__(self, guest_id, name, email, phone):
+        """Initializes a guest with ID, name, email, phone, and an empty booking history."""
+        if not email or "@" not in email:
+            raise ValueError("Invalid email format")
+        if len(str(phone)) < 10:  # Ensure phone has at least 10 digits
+            raise ValueError("Phone number must be at least 10 digits")
+        self.guest_id = guest_id 
+        self.name = name
+        self.email = email  
+        self.phone = phone 
+        self.bookings = []
+
+    def update_profile(self, name=None, email=None, phone=None):
+        """Updates guest profile details if provided"""
+        if name:
+            self.name = name
+        if email:
+            self.email = email
+        if phone:
+            self.phone = phone
+
+    def view_history(self):
+        """Returns the guest's booking history"""
+        return self.bookings
+
+    def manage_bookings(self, booking):
+        """Adds a booking to the guest's booking history"""
+        self.bookings.append(booking)
+
+    def __str__(self):
+        """Returns a string representation of the guest"""
+        return f"Guest {self.name} ({self.guest_id})"
+
+
+class LoyaltyMember(Guest):
+    def __init__(self, guest_id, name, email, phone, points=0, tier="Bronze"):
+        super().__init__(guest_id, name, email, phone)
+        self.points = points
+        self.tier = tier
+        self.loyalty_program = None  # Initialize the loyalty program as None
+    
+    def set_loyalty_program(self, loyalty_program):
+        self.loyalty_program = loyalty_program
+        self.update_tier()  # Update tier when the program is set
+
+    def earn_points(self, points):
+        self.points += points
+        self.update_tier()
+
+    def redeem_points(self, points):
+        if self.points >= points:
+            self.points -= points
+        else:
+            raise ValueError("Not enough points")
+
+    def update_tier(self):
+        # Update tier based on the points
+        if self.points >= self.loyalty_program.tier_requirements.get("Gold", float('inf')):
+            self.tier = "Gold"
+        elif self.points >= self.loyalty_program.tier_requirements.get("Silver", float('inf')):
+            self.tier = "Silver"
+        else:
+            self.tier = "Bronze"
+
+
+
+class Booking:
+    """represents a booking made by a guest"""
+    
+    def __init__(self, booking_id, guest, room, check_in, check_out, status="Confirmed"):
+        self.booking_id = booking_id  
+        self.guest = guest  
+        self.room = room  
+        self.check_in = check_in  
+        self.check_out = check_out  
+        self.status = status  
+        self.services = []  
+
+    def make_booking(self):
+        """Attempts to book a room and adds the booking to the guest's bookings."""
+        if not self.room.is_available():
+            raise ValueError(f"Room {self.room.room_no} is not available")  # <-- Explicit error
+        self.room.book_room()
+        self.guest.manage_bookings(self)
+        return True
+
+    def cancel_booking(self):
+        """Cancels the booking if it is confirmed and frees up the room."""
+        if self.status == "Confirmed":
+            self.status = "Cancelled"
+            self.room.free_room()
+            self.guest.bookings.remove(self)
+            return f"Booking {self.booking_id} has been cancelled."
+        elif self.status == "Cancelled":
+            raise ValueError(f"Booking {self.booking_id} has already been cancelled.")
+        return f"Booking {self.booking_id} cannot be cancelled."
+
+    def add_service(self, service):
+        """adds an additional service to the booking"""
+        self.services.append(service)
+
+    def remove_service(self, service):
+        """removes a service from the booking if it exists"""
+        if service in self.services:
+            self.services.remove(service)
+
+    def change_dates(self, new_check_in, new_check_out):
+        """updates the booking with new check-in and check-out dates"""
+        self.check_in = new_check_in
+        self.check_out = new_check_out
+    
+    def calculate_cost(self):
+        """calculates the total cost based on the number of nights stayed"""
+        num_nights = (self.check_out - self.check_in).days
+        return num_nights * self.room.price
+
+    def __str__(self):
+        """returns a string representation of the booking"""
+        return f"Booking {self.booking_id} - {self.guest.name} ({self.status})"
+
+class InvalidPaymentStatusError(Exception): #incase someone tries to refund a cancelled booking
+    """a custom exception raised when a payment is attempted with an invalid status""" 
+    pass
+
+class Payment:
+    """ handles payments for hotel bookings """
+    
+    def __init__(self, payment_id, amount, method, status="Pending"):
+        """ initializes a payment with an ID, amount, method, and status """
+        self.payment_id = payment_id  # Unique payment ID
+        self.amount = amount  # Payment amount
+        self.method = method  # Payment method (e.g., Credit Card, Cash)
+        self.status = status  # Payment status (Pending, Completed, Refunded)
+
+    def process_payment(self):
+        """ processes the payment if it is pending and returns True if successful """
+        if self.status == "Pending":
+            self.status = "Completed"
+            return True
+        else:
+            raise InvalidPaymentStatusError(f"Payment {self.payment_id} cannot be processed because it's {self.status}.")
+
+    def refund(self):
+        """ Refunds the payment if it was completed; returns True if successful """
+        if self.status == "Completed":
+            self.status = "Refunded"
+            return True
+        raise InvalidPaymentStatusError(f"Payment {self.payment_id} cannot be refunded because it is {self.status}.")
+
+    def __str__(self):
+        """ Returns a string representation of the payment """
+        return f"Payment {self.payment_id} - {self.amount} ({self.status})"
+
+
+from datetime import datetime
+
+class GuestServices:
+    """ manages guest services such as housekeeping and transportation"""
+    
+    def __init__(self, service_id, service_type, cost, staff_assigned):
+        self.service_id = service_id  
+        self.type = service_type  #type of service (housekeeping, room service, transportation, etc.)
+        self.status = "Requested"  #initial status of the service
+        self.cost = cost  #cost of the service
+        self.request_time = datetime.now()  #time when the service was requested
+        self.staff_assigned = staff_assigned  #staff member assigned to the service
+
+    def request_service(self):
+        """ changes the status to 'In Progress' when the service is requested"""
+        self.status = "In Progress"
+
+    def update_status(self, status):
+        """ updates the status of the service and records the timestamp of the update."""
+        self.status = status
+        self.request_time = datetime.now()  #Update the timestamp
+
+    def notify_staff(self):
+        """ returns a notification for the assigned staff"""
+        return f"Staff {self.staff_assigned} notified for service {self.type}."
+
+    def __str__(self):
+        """ returns a string representation of the service"""
+        return f"Service {self.service_id} - {self.type} ({self.status})"
+
+from datetime import date
+
+class Feedback:
+    """stores guest feedback and ratings"""
+  
+    existing_feedback = []  # Class-level list to store all feedback
+    
+    def __init__(self, feedback_id, rating, comments):
+        self.feedback_id = feedback_id  #unique feedback id
+        self.rating = rating  #rating given by the guest (1-10 or less determined by the hotel)
+        self.comments = comments  
+        self.date = date.today()  #date the feedback was submitted
+
+    def submit_feedback(self):
+        """submits the feedback and prevents duplicate feedback for the same booking."""
+        if self.feedback_id not in Feedback.existing_feedback:
+            Feedback.existing_feedback.append(self.feedback_id)
+            return f"Feedback submitted: {self.rating} stars - {self.comments}"
+        else:
+            raise ValueError("Feedback already submitted for this booking.")
+
+    def view_feedback(self):
+        """Returns a detailed view of the feedback."""
+        return f"Feedback ID: {self.feedback_id}, Rating: {self.rating}, Date: {self.date}, Comments: {self.comments}"
+
+    def __str__(self):
+        """Returns a string representation of the feedback."""
+        return f"Feedback {self.feedback_id} - {self.rating} stars"
+
+class LoyaltyProgram:
+    """defines the loyalty program structure"""
+    
+    def __init__(self, tier_requirements, benefits):
+        self.tier_requirements = tier_requirements  #dictionary connecting the tier names to their requirments
+        self.benefits = benefits  #dictionary mapping tier names to their benefits
+
+    def get_tier_benefits(self, tier):
+        """returns the benefits for a given tier"""
+        return self.benefits.get(tier, "No benefits available.")
+
+    def __str__(self):
+        """returns a string representation of the loyalty program"""
+        return "Loyalty Program"
