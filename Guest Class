@@ -1,0 +1,62 @@
+class Guest:
+    """represents a guest with personal details and their booking history."""
+    
+    def __init__(self, guest_id, name, email, phone):
+        """Initializes a guest with ID, name, email, phone, and an empty booking history."""
+        self.guest_id = guest_id 
+        self.name = name
+        self.email = email  
+        self.phone = phone 
+        self.bookings = []  #a list to store guest's booking history
+
+    def create_account(self, name, email, phone):
+        """Sets up the guest account details"""
+        self.name = name
+        self.email = email
+        self.phone = phone
+
+    def update_profile(self, name=None, email=None, phone=None):
+        """Updates guest profile details if provided"""
+        if name:
+            self.name = name
+        if email:
+            self.email = email
+        if phone:
+            self.phone = phone
+
+    def view_history(self):
+        """Returns the guest's booking history"""
+        return self.bookings
+
+    def manage_bookings(self, booking):
+        """Adds a booking to the guest's booking history"""
+        self.bookings.append(booking)
+
+    def __str__(self):
+        """Returns a string representation of the guest"""
+        return f"Guest {self.name} ({self.guest_id})"
+
+
+class LoyaltyMember(Guest):
+    """inheriting from Guest represents a guest with a loyalty membership"""
+    
+    def __init__(self, guest_id, name, email, phone, points=0, tier="Bronze"):
+        """Initializes a loyalty member with additional points and tier level."""
+        super().__init__(guest_id, name, email, phone)
+        self.points = points  #loyalty points
+        self.tier = tier  #loyalty tier (for instance, Bronze, Silver, Gold, Diamond)
+
+    def earn_points(self, points):
+        """adds points to the member's account"""
+        self.points += points
+
+    def redeem_points(self, points):
+        """redeems points if the member has enough; returns True if successful"""
+        if points <= self.points:
+            self.points -= points
+            return True
+        return False  #They dont have enough points
+
+    def __str__(self):
+        """Returns a string representation of the loyalty member."""
+        return f"Loyalty Member {self.name} (Points: {self.points}, Tier: {self.tier})"
