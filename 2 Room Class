@@ -18,7 +18,8 @@ class Room:
         if self.available:
             self.available = False  #Set the availability to false
             return True
-        return False  #return False if the room is already booked
+        else:
+            raise ValueError(f"Room {self.room_no} is already booked.")  #Provide a clear message
 
     def free_room(self):
         """Marks the room as available after checkout."""
