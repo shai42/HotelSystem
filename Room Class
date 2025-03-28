@@ -1,0 +1,24 @@
+class Room: #Represents a room in the hotel.
+   
+    def __init__(self, room_no, room_type, amenities, price, available=True): #Initializes a room with its details.
+        self.room_no = room_no
+        self.type = room_type
+        self.amenities = amenities
+        self.price = price
+        self.available = available
+
+    def is_available(self): #Returns whether the room is available ot not
+        return self.available
+
+    def book_room(self): #Books the room if it is available
+
+        if self.available:
+            self.available = False
+            return True
+        return False
+
+    def free_room(self): #Frees the room for future bookings.
+        self.available = True
+
+    def __str__(self): #Returns the string representation of the room.
+        return f"Room {self.room_no} ({self.type})"
