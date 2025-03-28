@@ -7,14 +7,7 @@ class Guest:
         self.name = name
         self.email = email  
         self.phone = phone 
-        self.bookings = []  #a list to store guest's booking history
-
-    def create_account(self, name, email, phone):
-        """Sets up the guest account details"""
-        if not self.name:  # Only create if there's no existing account
-            self.name = name
-            self.email = email
-            self.phone = phone
+        self.bookings = []
 
     def update_profile(self, name=None, email=None, phone=None):
         """Updates guest profile details if provided"""
@@ -36,6 +29,7 @@ class Guest:
     def __str__(self):
         """Returns a string representation of the guest"""
         return f"Guest {self.name} ({self.guest_id})"
+
 
 
 class LoyaltyMember(Guest):
