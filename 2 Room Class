@@ -15,11 +15,10 @@ class Room:
 
     def book_room(self):
         """Marks the room as booked if it is available."""
-        if self.available:
-            self.available = False  # Set the availability to false
-            return True
-        else:
-            raise ValueError(f"Room {self.room_no} is already booked.")  # Provide a clear message
+        if not self.available:
+            raise ValueError(f"Room {self.room_no} is already booked")  # <-- This was missing
+        self.available = False
+        return True
 
     def free_room(self):
         """Marks the room as available after checkout."""
