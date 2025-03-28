@@ -2,33 +2,32 @@ class Booking:
     """represents a booking made by a guest"""
     
     def __init__(self, booking_id, guest, room, check_in, check_out, status="Confirmed"):
-        """ initializes a booking with an ID, guest, room, check-in/out dates, and status :D """
         self.booking_id = booking_id  
         self.guest = guest  
         self.room = room  
-        self.check_in = check_in  #check-in date
-        self.check_out = check_out  #check-out date
-        self.status = status  #booking status
-        self.services = []  #a list of additional services requested
+        self.check_in = check_in  
+        self.check_out = check_out  
+        self.status = status  
+        self.services = []  
 
     def make_booking(self):
-        """ Attempts to book a room and adds the booking to the guest's bookings."""
+        """Attempts to book a room and adds the booking to the guest's bookings."""
         if self.room.is_available():
             self.room.book_room()
-            self.guest.manage_bookings(self)  #adds this booking to the guest's history
-            return True
-        return False
+            self.guest.manage_bookings(self)
+            return f"Booking {self.booking_id} confirmed for {self.guest.name}."
+        return f"Room {self.room.room_no} is not available for booking."
 
     def cancel_booking(self):
         """Cancels the booking if it is confirmed and frees up the room."""
         if self.status == "Confirmed":
-           self.status = "Cancelled"
-           self.room.free_room()
-           self.guest.bookings.remove(self)  # Remove the booking from the guest's history
-           return True
+            self.status = "Cancelled"
+            self.room.free_room()
+            self.guest.bookings.remove(self)
+            return f"Booking {self.booking_id} has been cancelled."
         elif self.status == "Cancelled":
-           raise ValueError(f"Booking {self.booking_id} has already been cancelled.")
-        return False
+            raise ValueError(f"Booking {self.booking_id} has already been cancelled.")
+        return f"Booking {self.booking_id} cannot be cancelled."
 
     def add_service(self, service):
         """adds an additional service to the booking"""
@@ -47,7 +46,7 @@ class Booking:
     def calculate_cost(self):
         """calculates the total cost based on the number of nights stayed"""
         num_nights = (self.check_out - self.check_in).days
-        return num_nights * self.room.price  # Cost = nights * room price
+        return num_nights * self.room.price
 
     def __str__(self):
         """returns a string representation of the booking"""
