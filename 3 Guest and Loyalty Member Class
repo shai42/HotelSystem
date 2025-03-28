@@ -56,6 +56,15 @@ class LoyaltyMember(Guest):
             self.points -= points
             return True
         return False  #They dont have enough points
+    
+    def update_tier(self):
+        """Updates the tier based on current points"""
+        if self.points >= 1000:
+            self.tier = "Gold"
+        elif self.points >= 500:
+            self.tier = "Silver"
+        else:
+            self.tier = "Bronze"
 
     def __str__(self):
         """Returns a string representation of the loyalty member."""
