@@ -1,10 +1,10 @@
 class Hotel: 
     """ Represents a hotel with rooms and a loyalty program."""
 
-    def __init__(self, hotel_id: int, name: str):
-        self.hotel_id = hotel_id  #a unique identifier for the hotel
+    def __init__(self, hotel_id, name):
+        self._hotel_id = hotel_id  #a unique identifier for the hotel
         self.name = name 
-        self.rooms = [] #a list to store rooms
+        self._rooms = [] #a list to store rooms
         self.loyalty_program = None
 
     def add_room(self, room):
@@ -16,5 +16,5 @@ class Hotel:
         if room in self.rooms:
             self.rooms.remove(room)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"Hotel {self.name} (ID: {self.hotel_id})"
